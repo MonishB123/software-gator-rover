@@ -7,6 +7,14 @@
     "--net=host",
     "--ipc=host"
   ],
+  "settings": {
+      "files.associations": {
+          "*.rviz": "yaml",
+          "*.srdf": "xml",
+          "*.urdf": "xml",
+          "*.xacro": "xml"
+      }
+  }
   "customizations": {
     "vscode": {
       "extensions": [

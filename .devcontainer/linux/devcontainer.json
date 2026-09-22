@@ -11,6 +11,14 @@
     "--mount", "type=bind,source=${localWorkspaceFolder}/src/,target=/home/ros2_ws/src", // mount the ros2_src folder into the container
   ],
   "onCreateCommand": "xhost +local:docker",
+  "settings": {
+      "files.associations": {
+          "*.rviz": "yaml",
+          "*.srdf": "xml",
+          "*.urdf": "xml",
+          "*.xacro": "xml"
+      }
+  }
   "containerEnv": {
       "DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
       "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",  
