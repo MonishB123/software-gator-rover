@@ -1,0 +1,31 @@
+{
+  "name": "gator-rover",
+  "build": {
+    "dockerfile": "../Dockerfile"
+    "context": "../"
+  },
+  "runArgs": [
+    "--net=host",
+    "--ipc=host",
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix",  // Only needed on linux, Comment if you are on Windows
+    "--mount", "type=bind,source=${localWorkspaceFolder}/src/,target=/home/ros2_ws/src", // mount the ros2_src folder into the container
+  ],
+  "onCreateCommand": "xhost +local:docker",
+  "containerEnv": {
+      "DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
+      "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",  
+      "XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
+      "PULSE_SERVER": "${localEnv:PULSE_SERVER}",
+      "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+  },
+//  "customizations": {
+//    "vscode": {
+//      "extensions": [
+//        "ms-iot.vscode-ros",
+//        "ms-vscode.cpptools",
+//        "ms-python.python"
+//      ]
+//    }
+//  },
+  "postCreateCommand": "rosdep update && echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc"
+}

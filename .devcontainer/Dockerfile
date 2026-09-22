@@ -7,10 +7,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-teleop-twist-keyboard \
     ros-humble-cv-bridge \
     ros-humble-desktop \
+    ros-humble-urdf-tutorial \
     ros-humble-xacro \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /home/ros2_ws/
 
 COPY . .
 
