@@ -11,4 +11,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-xacro \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /home/ros2_ws/
+WORKDIR /workspace

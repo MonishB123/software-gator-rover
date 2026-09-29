@@ -1,16 +1,18 @@
 {
   "name": "gator-rover",
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "../Dockerfile"
+    "context": "../"
   },
   "runArgs": [
     "--net=host",
     "--ipc=host",
-    "--mount", "type=bind,source=${localWorkspaceFolder}/src/,target=/home/ros_user/ros2_ws/src", // mount the ros2_src folder into the container
-		"--volume=/mnt/wslg:/mnt/wslg", // uncomment to use wslg,
+    "--volume=/mnt/wslg:/mnt/wslg", // uncomment to use wslg,
     "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
     "--gpus=all"
   ],
+  "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
+  "workspaceFolder": "/workspace"
   "customizations": {
     "vscode": {
       "extensions": [
