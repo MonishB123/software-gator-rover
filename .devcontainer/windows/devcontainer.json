@@ -1,7 +1,7 @@
 {
   "name": "gator-rover",
   "build": {
-    "dockerfile": "../Dockerfile"
+    "dockerfile": "../Dockerfile",
     "context": "../"
   },
   "runArgs": [
@@ -12,7 +12,7 @@
     "--gpus=all"
   ],
   "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
-  "workspaceFolder": "/workspace"
+  "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "extensions": [
