@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-desktop \
     ros-humble-urdf-tutorial \
     ros-humble-xacro \
+    python3 \
+    python3-pip \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
