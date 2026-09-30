@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root BTCPP_format="4" main_tree_to_execute="MissionTree">
+
+    <BehaviorTree ID="MissionTree">
+        <Sequence name="MissionSequence">
+
+            <!-- Establish the rover's position -->
+            <Localize/>
+
+            <!-- Navigate to the dig zone.
+                 If planning fails, attempt navigation recovery. -->
+            <Fallback name="DigZoneNavigationRecovery">
+                <DriveToDigZone/>
+                <NavigationRecovery/>
+            </Fallback>
+
+            <!-- Perform excavation -->
+            <Dig/>
+
+            <!-- Navigate to the berm -->
+            <Fallback name="BermNavigationRecovery">
+                <DriveToBerm/>
+                <NavigationRecovery/>
+            </Fallback>
+
+            <!-- Dump the excavated material -->
+            <Dump/>
+
+        </Sequence>
+    </BehaviorTree>
+
+</root>
