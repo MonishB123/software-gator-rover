@@ -1,0 +1,35 @@
+{
+  "name": "gator-rover",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "../"
+  },
+  "runArgs": [
+    "--net=host",
+    "--ipc=host",
+    "--volume=/mnt/wslg:/mnt/wslg", // uncomment to use wslg,
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
+    "--gpus=all"
+  ],
+  "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-iot.vscode-ros",
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "redhat.vscode-yaml",
+        "smilerobotics.urdf"
+      ]
+    }
+  },
+	"containerEnv": {
+		"DISPLAY": "localEnv:DISPLAY", // Needed for GUI try ":0" for windows
+		"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",  
+		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
+		"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
+		"ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+	},
+  "postCreateCommand": "rosdep update && echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc"
+}
