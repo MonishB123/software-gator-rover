@@ -15,4 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /workspace
+RUN pip3 install opencv-python
+    pip install apriltag
+
+WORKDIR /app
+
+COPY . .
+
