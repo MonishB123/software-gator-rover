@@ -16,6 +16,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install opencv-python
-    pip install apriltag
+RUN pip3 install pupil-apriltags
 
 WORKDIR /workspace
