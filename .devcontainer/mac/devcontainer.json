@@ -1,0 +1,28 @@
+{
+  "name": "gator-rover",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "../"
+  },
+  "runArgs": [
+    "--ipc=host"
+    // "--net=host" is left out: Docker Desktop for Mac ignores it unless host networking is enabled in settings
+    // X11 / WSLg / GPU mounts are left out: they are Linux/Windows only
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-iot.vscode-ros",
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "redhat.vscode-yaml",
+        "smilerobotics.urdf"
+      ]
+    }
+  },
+  "containerEnv": {
+    // "DISPLAY": "host.docker.internal:0", // Only needed for GUI apps (requires XQuartz on Mac)
+    "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST"
+  },
+  "postCreateCommand": "rosdep update && echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc"
+}

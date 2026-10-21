@@ -1,14 +1,13 @@
 import cv2
-import apriltag
+from pupil_apriltags import Detector
 
 # Input and output paths
-video_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/Screen Recording 2026-09-22 at 8.32.11 PM.mp4'
-output_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/output_video.mp4'
+video_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/480p_test_video.mp4.mov'
+output_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/output_video_480p.mp4'
 
-stream = cv2.VideoCapture(video_path)  
+stream = cv2.VideoCapture(video_path)
 
-tags = apriltag.DetectorOptions(families="tag36h11")
-detector = apriltag.Detector(tags)
+detector = Detector(families="tag36h11")
 
 if not stream.isOpened():
     print(f"Error: Could not open video file at {video_path}")
@@ -17,9 +16,10 @@ if not stream.isOpened():
 # Get the video's width, height, and frames-per-second (fps)
 frame_width = int(stream.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(stream.get(cv2.CAP_PROP_FRAME_HEIGHT))
-fps = int(stream.get(cv2.CAP_PROP_FPS))
-if fps == 0: 
-    fps = 30  # Fallback just in case
+# fps = int(stream.get(cv2.CAP_PROP_FPS))
+fps = 30
+# if fps == 0: 
+#     fps = 30  # Fallback just in case
 
 # Initialize the VideoWriter to save the video
 fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
