@@ -7,7 +7,7 @@
   "runArgs": [
     "--net=host",
     "--ipc=host",
-    "--volume=/tmp/.X11-unix:/tmp/.X11-unix",  // Only needed on linux, Comment if you are on Windows
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix"  // Only needed on linux, Comment if you are on Windows
   ],
   "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
   "workspaceFolder": "/workspace",

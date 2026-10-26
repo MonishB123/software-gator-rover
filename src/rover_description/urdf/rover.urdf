@@ -1,13 +1,32 @@
 <?xml version="1.0"?>
-<robot name="myfirst">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover">
+  <xacro:include filename="$(find rover_description)/urdf/materials.xacro"/>
+  <xacro:include filename="$(find rover_description)/urdf/wheel.xacro"/>
+
+  <link name="world"></link>
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <xacro:property name="length" value="0.53"/>
+  <xacro:property name="width" value="0.48"/>
+  <xacro:property name="height" value="0.44"/>
   <link name="base_link">
+    <origin xyz="0 0 1" rpy="0 0 0"/>
     <visual>
       <geometry>
-        <cylinder length="0.6" radius="0.2"/>
+        <box size="${length} ${width} ${height}"/>
       </geometry>
-      <material name="blue">
-        <color rgba="0 0 1 1"/>
-      </material>
+      <material name="blue"/>
     </visual>
   </link>
+
+  <xacro:wheel_and_joint base_link="base_link" name="front_right" x="${-length/2}" y="${width/2}" z="${-height/2}"/>
+  <xacro:wheel_and_joint base_link="base_link" name="front_left" x="${-length/2}" y="${-width/2}" z="${-height/2}"/>
+  <xacro:wheel_and_joint base_link="base_link" name="back_right" x="${length/2}" y="${width/2}" z="${-height/2}"/>
+  <xacro:wheel_and_joint base_link="base_link" name="back_left" x="${length/2}" y="${-width/2}" z="${-height/2}"/>
+
 </robot>
