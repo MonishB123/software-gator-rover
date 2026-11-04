@@ -12,6 +12,7 @@ def generate_launch_description():
         PathJoinSubstitution([FindPackageShare('urdf_launch'), 'launch', 'display.launch.py']),
         launch_arguments={
             'urdf_package': 'rover_description',
+            # 'rviz_config': PathJoinSubstitution(['rviz', '*.rviz']),
             'urdf_package_path': PathJoinSubstitution(['urdf', 'rover.urdf'])}.items()
     ))
 

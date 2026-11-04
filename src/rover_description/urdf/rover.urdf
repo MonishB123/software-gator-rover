@@ -1,32 +1,109 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover">
-  <xacro:include filename="$(find rover_description)/urdf/materials.xacro"/>
-  <xacro:include filename="$(find rover_description)/urdf/wheel.xacro"/>
+  <!-- <xacro:include filename="$(find rover_description)/urdf/wheel.xacro"/> -->
 
-  <link name="world"></link>
+  <material name="blue">
+    <color rgba="0 0 1 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0.1 0.1 0.1 1"/>
+  </material>
 
-  <joint name="world_joint" type="fixed">
-    <parent link="world"/>
-    <child link="base_link"/>
+  <link name="base_link"/>
+
+  <joint name="base_link_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="body_link"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <xacro:property name="length" value="0.53"/>
-  <xacro:property name="width" value="0.48"/>
-  <xacro:property name="height" value="0.44"/>
-  <link name="base_link">
-    <origin xyz="0 0 1" rpy="0 0 0"/>
+  <xacro:property name="base_length" value="0.53"/>
+  <xacro:property name="base_width" value="0.48"/>
+  <xacro:property name="base_height" value="0.44"/>
+  <link name="body_link">
     <visual>
       <geometry>
-        <box size="${length} ${width} ${height}"/>
+        <box size="${base_length} ${base_width} ${base_height}"/>
       </geometry>
       <material name="blue"/>
     </visual>
   </link>
 
-  <xacro:wheel_and_joint base_link="base_link" name="front_right" x="${-length/2}" y="${width/2}" z="${-height/2}"/>
-  <xacro:wheel_and_joint base_link="base_link" name="front_left" x="${-length/2}" y="${-width/2}" z="${-height/2}"/>
-  <xacro:wheel_and_joint base_link="base_link" name="back_right" x="${length/2}" y="${width/2}" z="${-height/2}"/>
-  <xacro:wheel_and_joint base_link="base_link" name="back_left" x="${length/2}" y="${-width/2}" z="${-height/2}"/>
+  <!-- Linear actuators links and joints for bucket movement -->
+  <!-- <link name="actuator"/> -->
 
+  <!-- Wheel links and joints -->
+  <xacro:property name="wheel_radius" value="0.1"/>
+  <xacro:property name="wheel_width" value="0.08"/>
+  <xacro:property name="wheel_x" value="${base_length/2}"/>
+  <xacro:property name="wheel_y" value="${base_width/2 + wheel_width/2}"/>
+  <xacro:property name="wheel_z" value="${-base_height/2 + wheel_radius}"/>
+
+  <!-- Back right -->
+  <link name="wheel_back_right">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="wheel_back_right_joint" type="continuous">
+    <parent link="body_link"/>
+    <child link="wheel_back_right"/>
+    <origin xyz="${-wheel_x} ${-wheel_y} ${wheel_z}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Back left -->
+  <link name="wheel_back_left">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="wheel_back_left_joint" type="continuous">
+    <parent link="body_link"/>
+    <child link="wheel_back_left"/>
+    <origin xyz="${-wheel_x} ${wheel_y} ${wheel_z}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Front right -->
+  <link name="wheel_front_right">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="wheel_front_right_joint" type="continuous">
+    <parent link="body_link"/>
+    <child link="wheel_front_right"/>
+    <origin xyz="${wheel_x} ${-wheel_y} ${wheel_z}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Front left -->
+  <link name="wheel_front_left">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <joint name="wheel_front_left_joint" type="continuous">
+    <parent link="body_link"/>
+    <child link="wheel_front_left"/>
+    <origin xyz="${wheel_x} ${wheel_y} ${wheel_z}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
 </robot>
