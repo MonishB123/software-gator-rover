@@ -1,0 +1,55 @@
+1. Build (only when needed)
+
+You only need this the first time, or after changing setup.py, package.xml, the launch file, or adding files. Editing a node’s code doesn’t need a rebuild, because of --symlink-install.
+
+bash
+cd /workspaces/software-gator-rover
+colcon build --symlink-install --packages-select rover_vision
+
+2. Source (every new terminal)
+
+bash
+source install/setup.bash
+
+3. Run it
+
+Option A: one command, video loops forever (stop with Ctrl+C):
+
+bash
+ros2 launch rover_vision apriltag.launch.py video_path:=/workspaces/software-gator-rover/src/rover_vision/test_images/480p_test_video.mp4.mov
+
+Option B: two terminals, video plays once:
+
+bash
+# Terminal 1
+source install/setup.bash
+ros2 run rover_vision video_publisher --ros-args -p video_path:=/workspaces/software-gator-rover/src/rover_vision/test_images/480p_test_video.mp4.mov -p loop:=false
+
+# Terminal 2
+source install/setup.bash
+ros2 run rover_vision apriltag_node
+
+4. Look at the output (optional, another terminal)
+
+bash
+source install/setup.bash
+ros2 topic echo /apriltag/detections     # the JSON other teams will read
+ros2 topic hz /camera/image_raw          # check frames are flowing
+ros2 node list                           # check both nodes are alive
+
+With the real camera later
+
+Once a camera driver publishes /camera/image_raw, skip the video publisher and run just the detector:
+
+bash
+ros2 launch rover_vision apriltag.launch.py
+
+Leaving video_path unset means the fake camera isn’t started.
+
+Notes
+
+After a container rebuild or in a fresh container, the numpy pin is gone unless it’s in the Dockerfile. If you see the _ARRAY_API warning again, run pip3 install "numpy<2".
+To avoid typing source every time, add this line to ~/.bashrc inside the container, though a container rebuild will reset it:
+bash
+  echo 'source /workspaces/software-gator-rover/install/setup.bash' >> ~/.bashrc
+To stop anything, press Ctrl+C in its terminal.

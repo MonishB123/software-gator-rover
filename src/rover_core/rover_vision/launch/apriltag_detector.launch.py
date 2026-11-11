@@ -2,8 +2,8 @@ import cv2
 from pupil_apriltags import Detector
 
 # Input and output paths
-video_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/480p_test_video.mp4.mov'
-output_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/output_video_480p.mp4'
+video_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/multi-tags480p.mov'
+output_path = '/workspaces/software-gator-rover/src/rover_core/rover_vision/test_images/480poutput_video_multi-tags.mp4'
 
 stream = cv2.VideoCapture(video_path)
 
