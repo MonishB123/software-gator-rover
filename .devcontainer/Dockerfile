@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-desktop \
     ros-humble-urdf-tutorial \
     ros-humble-xacro \
+    ros-humble-ros2-control \
+    ros-humble-ros2-controllers \
     python3 \
     python3-pip \
     libgl1-mesa-glx \

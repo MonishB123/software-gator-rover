@@ -15,7 +15,7 @@ setup(
         # Include all launch files.
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.py'))),
         # Copy the urdf files into the share folder so that they can be found by the launch files
-        (os.path.join('share', package_name, 'urdf'), glob(os.path.join('urdf', '*'))),
+        (os.path.join('share', package_name, 'description'), glob(os.path.join('description', '*'))),
     ],
     maintainer='Gator Rover Software Team',
     maintainer_email='swe@gatorrover.org',
