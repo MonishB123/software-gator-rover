@@ -1,0 +1,33 @@
+
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="boulder">
+    <static>true</static>
+
+    <link name="rock">
+
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://boulder/meshes/rock1.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </collision>
+
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://boulder/meshes/rock1.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.35 0.35 0.35 1</ambient>
+          <diffuse>0.45 0.45 0.45 1</diffuse>
+        </material>
+      </visual>
+
+    </link>
+  </model>
+</sdf>
