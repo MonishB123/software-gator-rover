@@ -15,8 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install opencv-python
-RUN pip3 install pupil-apriltags
+RUN pip3 install "numpy<2" opencv-python pupil-apriltags
 
 WORKDIR /app
 
