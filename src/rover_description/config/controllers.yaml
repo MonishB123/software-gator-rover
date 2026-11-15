@@ -1,0 +1,25 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+
+    # Broadcaster for joint states (position, velocity, effort)
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+# --- Controller Specific Parameters ---
+diff_drive_controller:
+  ros__parameters:
+    left_wheel_names: [left_wheel_joint]
+    right_wheel_names: [right_wheel_joint]
+    wheel_separation: 0.1
+    wheel_radius: 0.015
+    
+    odom_frame_id: "odom"
+    base_frame_id: "world"
+
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+    enable_odom_tf: True

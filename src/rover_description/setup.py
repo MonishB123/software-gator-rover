@@ -14,6 +14,8 @@ setup(
         (os.path.join('share', package_name), ['package.xml']),
         # Include all launch files.
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.py'))),
+        # Install the RViz configuration used by the display launch file.
+        (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*'))),
         # Copy the urdf files into the share folder so that they can be found by the launch files
         (os.path.join('share', package_name, 'description'), glob(os.path.join('description', '*'))),
     ],
