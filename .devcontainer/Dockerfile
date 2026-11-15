@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-teleop-twist-keyboard \
     ros-humble-cv-bridge \
     ros-humble-desktop \
-    ros-humble-urdf-tutorial \
+    ros-humble-urdf-launch \
     ros-humble-xacro \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \

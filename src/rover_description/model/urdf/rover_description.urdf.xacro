@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:include filename="$(find rover_description)/description/materials.urdf.xacro"/>
-  <xacro:include filename="$(find rover_description)/description/wheel_link.urdf.xacro"/>
+  <xacro:include filename="$(find rover_description)/model/urdf/materials.urdf.xacro"/>
+  <xacro:include filename="$(find rover_description)/model/urdf/wheel_link.urdf.xacro"/>
 
   <xacro:macro name="rover">
 
@@ -38,14 +38,14 @@
       <collision>
         <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/base_link.stl" scale="1 1 1" />
+          <mesh filename="package://rover_description/model/meshes/base_link.stl" scale="1 1 1" />
         </geometry>
       </collision>
 
       <visual>
         <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/base_link.stl" scale="1 1 1" />
+          <mesh filename="package://rover_description/model/meshes/base_link.stl" scale="1 1 1" />
         </geometry>
         <material name="orange"/>
       </visual>
@@ -126,14 +126,14 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/boom_arm.stl" scale="1 1 1" />
+          <mesh filename="package://rover_description/model/meshes/boom_arm.stl" scale="1 1 1" />
         </geometry>
       </collision>
 
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/boom_arm.stl" scale="1 1 1" />
+          <mesh filename="package://rover_description/model/meshes/boom_arm.stl" scale="1 1 1" />
         </geometry>
         <material name="red"/>
       </visual>
@@ -160,7 +160,7 @@
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/gimbal.stl" scale="1 1 1"/>
+          <mesh filename="package://rover_description/model/meshes/gimbal.stl" scale="1 1 1"/>
         </geometry>
         <material name="brown"/>
       </visual>
@@ -168,7 +168,7 @@
       <collision>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/gimbal.stl" scale="1 1 1"/>
+          <mesh filename="package://rover_description/model/meshes/gimbal.stl" scale="1 1 1"/>
         </geometry>
       </collision>
 
@@ -191,7 +191,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/gimbal.stl" scale="1 1 1"/>
+          <mesh filename="package://rover_description/model/meshes/gimbal.stl" scale="1 1 1"/>
         </geometry>
         <material name="brown"/>
       </visual>
@@ -199,7 +199,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
         <geometry>
-          <mesh filename="package://rover_description/description/gimbal.stl" scale="1 1 1"/>
+          <mesh filename="package://rover_description/model/meshes/gimbal.stl" scale="1 1 1"/>
         </geometry>
       </collision>
 
