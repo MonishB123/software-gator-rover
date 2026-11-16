@@ -15,6 +15,7 @@ def generate_launch_description():
 
     description_package_share = FindPackageShare("rover_description")
 
+    ld.add_action(DeclareLaunchArgument(name='gui', default_value='true', description='enable gui of rviz2'))
 
 # runs the display.launch file with the given arguments
     ld.add_action(IncludeLaunchDescription(
@@ -22,32 +23,55 @@ def generate_launch_description():
         launch_arguments={
             'urdf_package': 'rover_description',
             'rviz_config': PathJoinSubstitution([description_package_share,'config', 'rover.rviz']),
-            'urdf_package_path': PathJoinSubstitution(['model', 'rover.urdf.xacro'])}.items()
+            'jsp_gui' : LaunchConfiguration('gui'),
+            'urdf_package_path': PathJoinSubstitution(['model', 'rover.urdf.xacro'])}.items(),
     ))
 
     default_controller_config_path = PathJoinSubstitution([description_package_share, 'config', 'controllers.yaml'])
     ld.add_action(DeclareLaunchArgument(name='controller_config_path', default_value=default_controller_config_path,
                                         description='Absolute path to controller config file'))
 
-    # ld.add_action(DeclareLaunchArgument(name='ros2_control_enable', default_value='false', 
-    #                                     description='If true launch ros2_control_node'))
+    # ld.add_action(
+    #     Node(
+    #         package="controller_manager",
+    #         executable="spawner",
+    #         name="controller_spawner",
+    #         arguments=[
+    #             "joint_state_broadcaster",
+    #             "forward_position_controller",
+    #             "--param-file",
+    #             LaunchConfiguration('controller_config_path')
+    #         ],
+    #     ),
+    # )
 
-    robot_description_content = ParameterValue(
-        Command(['xacro ', PathJoinSubstitution([description_package_share, 'model', 'rover.urdf.xacro'])]),
-        value_type=str
-    )
+    # ld.add_action(IncludeLaunchDescription(
+    #     PathJoinSubstitution([FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py" ]),
+    #     launch_arguments=[("gz_args", " -r -v 3 empty.sdf")],
+    # ))
 
-    ld.add_action(
-        Node(
-            package="controller_manager",
-            executable="ros2_control_node",
-            parameters=[
-                {'robot_description': robot_description_content},
-                LaunchConfiguration('controller_config_path')
-            ],
-            output="screen",
-            # condition=IfCondition(LaunchConfiguration('ros2_control_enable'))
-        )
-    )
+    # ld.add_action(
+    #     Node(
+    #         package="ros_gz_bridge",
+    #         executable="parameter_bridge",
+    #         arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
+    #         output="screen",
+    #     )
+    # )
+
+    # ld.add_action(
+    #     Node(
+    #         package="ros_gz_sim",
+    #         executable="create",
+    #         output="screen",
+    #         arguments=[
+    #             "-topic",
+    #             "/robot_description",
+    #             "-allow_renaming",
+    #             "true",
+    #         ],
+    #     )
+    # )
+
 
     return ld

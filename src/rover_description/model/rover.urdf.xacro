@@ -5,9 +5,12 @@
   <!-- includes rover model -->
   <xacro:include filename="$(find rover_description)/model/urdf/rover_description.urdf.xacro"/>
 
-  <link name="world"/>
+  <xacro:include filename="$(find rover_description)/model/urdf/rover_gazebo.urdf.xacro"/>
+
+
+
 
   <xacro:rover/>
-  <xacro:rover_ros2_control use_mock_hardware="true"/>
+  <xacro:rover_ros2_control use_mock_hardware="false"/>
 
 </robot>

@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
     ros-humble-ros-gz \
+    ros-humble-gz-ros2-control \
     python3 \
     python3-pip \
     libgl1-mesa-glx \
