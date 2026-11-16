@@ -9,7 +9,7 @@
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://boulder/meshes/rock1.obj</uri>
+            <uri>model://rock_boulder/meshes/rock1.obj</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -18,7 +18,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://boulder/meshes/rock1.obj</uri>
+            <uri>model://rock_boulder/meshes/rock1.obj</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>

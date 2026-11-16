@@ -153,11 +153,23 @@
     </model>
 
 
-    <!-- Test boulder -->
+    <!-- Test boulders -->
     <include>
-      <uri>model://boulder</uri>
-      <name>test_boulder</name>
-      <pose>0 0 0 0 0 0</pose>
+      <uri>model://rock_boulder</uri>
+      <name>test_boulder_1</name>
+      <pose>1.5 0.75 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://rock_boulder</uri>
+      <name>test_boulder_2</name>
+      <pose>-0.5 2 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>model://rock_boulder</uri>
+      <name>test_boulder_3</name>
+      <pose>-1 -1 0 0 0 0</pose>
     </include>
 
   </world>
