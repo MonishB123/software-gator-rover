@@ -66,7 +66,7 @@ def generate_launch_description():
         ),
     )
 
-    default_sdf_world_path = PathJoinSubstitution([description_package_share, 'worlds', 'world.sdf'])
+    default_sdf_world_path = PathJoinSubstitution([description_package_share, 'worlds', 'lunabotics_arena.world'])
     ld.add_action(DeclareLaunchArgument(name='world_sdf_path', default_value=default_sdf_world_path, description='absolute path to the sdf world file'))
 
     ld.add_action(
