@@ -18,7 +18,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     ld.add_action(DeclareLaunchArgument(
-        "gui", default_value="true", choices=["true", "false"],
+        "gui", default_value="false", choices=["true", "false"],
         description="Start the Gazebo GUI and RViz; false runs headless",
     ))
     gui = LaunchConfiguration("gui")
