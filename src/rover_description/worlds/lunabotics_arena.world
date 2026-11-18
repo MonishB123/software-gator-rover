@@ -3,6 +3,20 @@
 <sdf version="1.6">
   <world name="arena">
 
+    <!-- Explicit world plugins replace the default server systems. -->
+    <plugin filename="ignition-gazebo-physics-system"
+            name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="ignition-gazebo-user-commands-system"
+            name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system"
+            name="ignition::gazebo::systems::SceneBroadcaster"/>
+
+    <!-- Rendering-based sensors: camera and GPU lidar. -->
+    <plugin filename="ignition-gazebo-sensors-system"
+            name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
     <!-- Physics settings -->
     <physics type="ode" name="default_physics">
       <max_step_size>0.001</max_step_size>
@@ -17,9 +31,13 @@
     </scene>
 
     <!-- Sunlight -->
-    <include>
-      <uri>model://sun</uri>
-    </include>
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
 
     <!-- Flat ground -->
     <model name="arena_floor">
@@ -155,7 +173,7 @@
 
     <!-- Test boulder -->
     <include>
-      <uri>model://boulder</uri>
+      <uri>model://rock_boulder</uri>
       <name>test_boulder</name>
       <pose>0 0 0 0 0 0</pose>
     </include>

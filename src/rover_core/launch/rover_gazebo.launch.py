@@ -1,7 +1,9 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+import os
+
+from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable
 from launch.actions import DeclareLaunchArgument, SetLaunchConfiguration
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import EnvironmentVariable, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import LaunchConfiguration
@@ -29,6 +31,14 @@ def generate_launch_description():
     ))
 
     description_package_share = FindPackageShare("rover_description")
+
+    # Support Fortress and newer Gazebo while preserving custom resource paths.
+    for variable in ("IGN_GAZEBO_RESOURCE_PATH", "GZ_SIM_RESOURCE_PATH"):
+        ld.add_action(SetEnvironmentVariable(variable, [
+            PathJoinSubstitution([description_package_share, "models"]),
+            os.pathsep,
+            EnvironmentVariable(variable, default_value=""),
+        ]))
 
     default_controller_config_path = PathJoinSubstitution([description_package_share, 'config', 'controllers.yaml'])
     ld.add_action(DeclareLaunchArgument(name='controller_config_path', default_value=default_controller_config_path,
@@ -107,11 +117,13 @@ def generate_launch_description():
     spawn_robot = Node(
         package="ros_gz_sim",
         executable="create",
+        parameters=[{"use_sim_time": True}],
         output="screen",
         arguments=[
             "-topic", "/robot_description",
             "-name", "rover",
             "-allow_renaming", "true",
+            "-x", "2.0",
             "-z", "0.3",
         ],
     )
@@ -119,6 +131,7 @@ def generate_launch_description():
     joint_state_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        parameters=[{"use_sim_time": True}],
         output="screen",
         arguments=[
             "joint_state_broadcaster",
@@ -130,6 +143,7 @@ def generate_launch_description():
     drive_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        parameters=[{"use_sim_time": True}],
         output="screen",
         arguments=[
             "diff_drive_controller",
