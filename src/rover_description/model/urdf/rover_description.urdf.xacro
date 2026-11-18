@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find rover_description)/model/urdf/materials.urdf.xacro"/>
+  <xacro:include filename="$(find rover_description)/model/urdf/wheel_link.urdf.xacro"/>
+
+  <xacro:macro name="cylinder_inertia" params="mass radius height">
+    <inertia ixx="${mass*(3*radius*radius+height*height)/12}" ixy = "0" ixz = "0"
+              iyy="${mass*(3*radius*radius+height*height)/12}" iyz = "0"
+              izz="${mass*radius*radius/2}" /> 
+  </xacro:macro>
+
+  <xacro:macro name="box_inertia" params="mass x y z">
+    <inertia
+      ixx="${mass*(y*y+z*z)/12}"
+      ixy="0"
+      ixz="0"
+      iyy="${mass*(x*x+z*z)/12}"
+      iyz="0"
+      izz="${mass*(x*x+y*y)/12}"/>
+  </xacro:macro>
+
+
+  <xacro:macro name="rover">
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+    <!-- Constants for robot dimensions -->
+    <xacro:property name="base_mass" value="60" /> 
+    <xacro:property name="base_width" value="0.32" />
+    <xacro:property name="base_length" value="0.53" />
+    <xacro:property name="base_height" value="0.1" />
+    <xacro:property name="base_mast_height" value="0.3" />
+    <xacro:property name="base_hinge_x_offset" value="${(base_length/2) - (base_length/5) - 0.06/2}" />
+    <xacro:property name="base_hinge_z_offset" value="${(base_height) + 0.08 - 0.02}" />
+    <!-- wheel constants -->
+    <xacro:property name="wheel_mass" value="5" /> <!-- arbitrary value for wheel mass -->
+    <xacro:property name="wheel_len" value="0.08" />
+    <xacro:property name="wheel_radius" value="0.1" />
+    <xacro:property name="wheel_z_offset" value="${0.02-base_height/2}" /> 
+    <xacro:property name="wheel_x_offset" value="${(base_length/2)-0.1}" /> 
+    <xacro:property name="wheel_y_offset" value="${(base_width/2)+(wheel_len/2)+0.02}" /> 
+    <!-- mast constants -->
+    <xacro:property name="mast_y_offset" value="${base_width/2+0.02}"/>
+    <xacro:property name="mast_z_offset" value="0.3"/>
+    <!-- camera/lidar constants -->
+    <xacro:property name="lidar_width" value="0.06"/>
+    <xacro:property name="lidar_height" value="0.08"/>
+    <xacro:property name="lidar_length" value="0.08"/>
+    <xacro:property name="camera_width" value="0.02"/>
+    <xacro:property name="camera_length" value="0.05"/>
+
+    <link name="base_footprint"/>
+  
+    <joint name="base_footprint_joint" type="fixed">
+      <parent link="base_footprint"/>
+      <child link="base_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- ************ BASE LINK ************ -->
+
+    <link name="base_link">
+      <collision>
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/base_link.stl" scale="1 1 1" />
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/base_link.stl" scale="1 1 1" />
+        </geometry>
+        <material name="orange"/>
+      </visual>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${base_mass}"/>
+        <xacro:box_inertia mass="0.1" x="${base_length}" y="${base_width}" z="${base_height}"/>
+      </inertial>
+    </link>
+    
+    <gazebo reference="base_link">
+      <material>Gazebo/Orange</material>
+    </gazebo>
+
+
+    <!-- ************ WHEEL LINKS ************ -->
+
+    <!-- left wheel joint -->
+    <joint name="left_back_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="left_back_wheel"/>
+      <origin xyz="${wheel_x_offset} -${wheel_y_offset} ${wheel_z_offset}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.2"/>
+      <limit effort="100" velocity="1.0"/>
+    </joint>
+
+    <xacro:rover_wheel_link name="left_back_wheel" PI="${PI}" wheel_mass="${wheel_mass}" wheel_radius="${wheel_radius}" wheel_len="${wheel_len}"/>
+
+    <xacro:rover_gazebo_wheel link_name="left_back_wheel"/>
+
+
+    <!-- right wheel joint -->
+    <joint name="right_back_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="right_back_wheel"/>
+      <origin xyz="${wheel_x_offset} ${wheel_y_offset} ${wheel_z_offset}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.2"/>
+      <limit effort="100" velocity="1.0"/>
+    </joint>
+
+    <xacro:rover_wheel_link name="right_back_wheel" PI="${PI}" wheel_mass="${wheel_mass}" wheel_radius="${wheel_radius}" wheel_len="${wheel_len}"/>
+
+    <xacro:rover_gazebo_wheel link_name="right_back_wheel"/>
+
+
+    <!-- left front wheel joint -->
+    <joint name="left_front_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="left_front_wheel"/>
+      <origin xyz="${-wheel_x_offset} ${-wheel_y_offset} ${wheel_z_offset}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.2"/>
+      <limit effort="100" velocity="1.0"/>
+    </joint>
+
+    <xacro:rover_wheel_link name="left_front_wheel" PI="${PI}" wheel_mass="${wheel_mass}" wheel_radius="${wheel_radius}" wheel_len="${wheel_len}"/>
+
+    <xacro:rover_gazebo_wheel link_name="left_front_wheel"/>
+
+
+    <!-- right front wheel joint -->
+    <joint name="right_front_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="right_front_wheel"/>
+      <origin xyz="${-wheel_x_offset} ${wheel_y_offset} ${wheel_z_offset}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.2"/>
+      <limit effort="100" velocity="1.0"/>
+    </joint>
+
+    <xacro:rover_wheel_link name="right_front_wheel" PI="${PI}" wheel_mass="${wheel_mass}" wheel_radius="${wheel_radius}" wheel_len="${wheel_len}"/>
+
+    <xacro:rover_gazebo_wheel link_name="right_front_wheel"/>
+
+
+
+    <!-- ************ BOOM ARM LINK ************ -->
+    <joint name="boom_arm_to_base_link_joint" type="revolute">
+      <parent link="base_link"/>
+      <child link="boom_arm"/>
+      <origin xyz="${base_hinge_x_offset} 0 ${base_hinge_z_offset}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.2"/>
+      <limit lower="0" upper="${PI/2}" effort="100" velocity="1.0"/>
+    </joint>
+
+    <link name="boom_arm">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/boom_arm.stl" scale="1 1 1" />
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/boom_arm.stl" scale="1 1 1" />
+        </geometry>
+        <material name="red"/>
+      </visual>
+
+      <inertial>
+          <mass value="8.86326" />
+          <origin xyz="-0.224556 -1.05792e-17 -0.00427204" rpy="0 -0 0" />
+          <inertia ixx="0.157088" ixy="0" ixz="-0.0500515" iyy="0.299691" iyz="0" izz="0.417671" />
+      </inertial>
+    </link>
+
+    <gazebo reference="boom_arm">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+
+    <!-- ************ GIMBAL LINK ************ -->
+    <joint name="gimbal_to_base_joint" type="continuous">
+      <origin xyz="0 ${-mast_y_offset} ${mast_z_offset}" rpy="0.0 0.0 0.0"/>
+      <parent link="base_link"/>
+      <child link="gimbal_base"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="gimbal_base">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/gimbal.stl" scale="1 1 1"/>
+        </geometry>
+        <material name="brown"/>
+      </visual>
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.2"/>
+        <xacro:cylinder_inertia mass="0.2" radius="0.06" height="0.01"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="gimbal_base">
+      <material>Gazebo/Brown</material>
+    </gazebo>
+
+
+
+    <!-- ************ LIDAR LINK ************ -->
+    <joint name="lidar_to_gimbal_joint" type="fixed">
+      <origin xyz="0 0 ${0.01/2+lidar_height/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="gimbal_base"/>
+      <child link="lidar_link"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="lidar_link">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/lidar.stl" scale="1 1 1"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+    </link>
+
+
+    <!-- ************ CAMERA LINK ************ -->
+    <joint name="camera_to_lidar_joint" type="fixed">
+      <origin xyz="0 0 ${lidar_height/2+camera_length/2}" rpy="0.0 0.0 0.0"/>
+      <parent link="lidar_link"/>
+      <child link="camera_link"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="camera_link">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/camera.stl" scale="1 1 1"/>
+        </geometry>
+        <material name="green"/>
+      </visual>
+    </link>
+      
+    <joint type="fixed" name="camera_optical_joint">
+      <origin xyz="0 0 0" rpy="-1.5707 0 -1.5707"/>
+      <child link="camera_link_optical"/>
+      <parent link="camera_link"/>
+    </joint>
+
+    <link name="camera_link_optical"/>
+
+    <!-- ************ BUCKET LINK ************ -->
+    <xacro:property name="bucket_x_offset" value="0.5" /> 
+    <xacro:property name="bucket_z_offset" value="0.157" />
+    <xacro:property name="bucket_width" value="0.14" /> 
+    <xacro:property name="bucket_length" value="0.4" />
+    <xacro:property name="bucket_height" value="0.1" />
+    <joint name="bucket_to_boom_arm_joint" type="revolute">
+      <origin xyz="${-bucket_x_offset} 0 ${-bucket_z_offset}" rpy="0.0 0.0 0.0"/>
+      <parent link="boom_arm"/>
+      <child link="bucket_link"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.2"/>
+      <limit lower="${-PI/2}" upper="${PI/4}" effort="100" velocity="1.0"/>
+    </joint>
+
+    <link name="bucket_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/bucket.stl" scale="1 1 1"/>
+        </geometry>
+        <material name="green"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://rover_description/model/meshes/bucket.stl" scale="1 1 1"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <mass value="10"/>
+        <xacro:box_inertia mass="10" x="${bucket_width}" y="${bucket_length}" z="${bucket_height}"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="bucket_link">
+      <material>Gazebo/Green</material>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

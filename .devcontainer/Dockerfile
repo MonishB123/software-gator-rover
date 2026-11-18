@@ -7,8 +7,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-teleop-twist-keyboard \
     ros-humble-cv-bridge \
     ros-humble-desktop \
-    ros-humble-urdf-tutorial \
+    ros-humble-urdf-launch \
     ros-humble-xacro \
+    ros-humble-ros2-control \
+    ros-humble-ros2-controllers \
+    ros-humble-ros-gz \
+    ros-humble-gz-ros2-control \
     python3 \
     python3-pip \
     libgl1-mesa-glx \
@@ -17,7 +21,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip3 install "numpy<2" opencv-python pupil-apriltags
 
-WORKDIR /app
-
-COPY . .
-
+WORKDIR /workspace

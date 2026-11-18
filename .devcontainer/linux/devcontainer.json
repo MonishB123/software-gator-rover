@@ -7,7 +7,7 @@
   "runArgs": [
     "--net=host",
     "--ipc=host",
-    "--volume=/tmp/.X11-unix:/tmp/.X11-unix",  // Only needed on linux, Comment if you are on Windows
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix"  // Only needed on linux, Comment if you are on Windows
   ],
   "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
   "workspaceFolder": "/workspace",
@@ -24,6 +24,11 @@
     }
   },
   "containerEnv": {
+      // Keep Gazebo GUI/server discovery on the same local interface.
+      "IGN_IP": "127.0.0.1",
+      "IGN_PARTITION": "gator_rover",
+      "QT_QPA_PLATFORM": "xcb",
+      "LIBGL_ALWAYS_SOFTWARE": "1",
       "DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
       "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
       "XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover">
+  <!-- includes the ros2_control stuff -->
+  <xacro:include filename="$(find rover_description)/model/urdf/rover.ros2_control.xacro"/>
+  <!-- includes rover model -->
+  <xacro:include filename="$(find rover_description)/model/urdf/rover_description.urdf.xacro"/>
+
+  <xacro:include filename="$(find rover_description)/model/urdf/rover_gazebo.urdf.xacro"/>
+
+
+
+
+  <xacro:rover/>
+  <xacro:rover_ros2_control use_mock_hardware="false"/>
+
+</robot>
