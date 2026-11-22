@@ -23,7 +23,7 @@ Option B: two terminals, video plays once:
 bash
 # Terminal 1
 source install/setup.bash
-ros2 run rover_vision video_publisher --ros-args -p video_path:=/workspaces/software-gator-rover/src/rover_vision/test_images/480p_test_video.mp4.mov -p loop:=false
+ros2 run rover_vision video_publisher --ros-args -p video_path:=/workspaces/software-gator-rover/src/rover_vision/test_images/multi-tags480p.mov -p loop:=false
 
 # Terminal 2
 source install/setup.bash
