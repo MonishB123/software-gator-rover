@@ -55,12 +55,13 @@ class AprilTagNode(Node):
         # geometry for solvePnP
         # order matches pupil_apriltags corners (bottom-left, bottom-right, top-right, top-left)
         h = self.tag_size / 2.0
+        
         self.object_points = np.array([
-            [-h, -h, 0.0],  # bottom-left
-            [ h, -h, 0.0],  # bottom-right
-            [ h,  h, 0.0],  # top-right
-            [-h,  h, 0.0]   # top-left
-        ], dtype=np.float64)
+                            [-h,  h, 0], # tl
+                            [ h,  h, 0], # tr
+                            [ h, -h, 0], # br
+                            [-h, -h, 0]  # bl
+                            ], dtype=np.float64)
         
         # detector, bridge, intrinsics
         self.detector = Detector(families=p("tag_family").value)
@@ -149,15 +150,16 @@ class AprilTagNode(Node):
                 continue
             
             # Solve for pose
-            image_points = np.array(r.corners, dtype=np.float64)
-            success, rvec, tvec = cv2.solvePnP(
-                self.object_points, image_points, 
-                self.camera_matrix, self.dist_coeffs,
-                flags = cv2.SOLVEPNP_IPPE_SQUARE
-            )
-            if not success:
-                self.get_logger().warn(f"solvePnP failed for tag ID {r.tag_id}")
-                continue
+            image_points = np.array(r.corners[::-1], dtype=np.float64)   # BL,BR,TR,TL -> TL,TR,BR,BL
+            ok, rvec, tvec = cv2.solvePnP(self.object_points, image_points,
+                                        self.camera_matrix, self.dist_coeffs,
+                                        flags=cv2.SOLVEPNP_IPPE_SQUARE)
+            proj, _ = cv2.projectPoints(self.object_points, rvec, tvec,
+                                        self.camera_matrix, self.dist_coeffs)
+            reproj = float(np.mean(np.linalg.norm(proj.reshape(-1, 2) - image_points, axis=1)))
+            if not ok or tvec[2, 0] <= 0 or reproj > 2.0:
+                continue            # tag must be in front of the camera and fit its own corners
+            # add r.decision_margin and reproj to the published JSON
             
             x, y ,z = tvec.flatten()                    # meters, camera frame: x right, y down, z forward
             distance = float(np.linalg.norm(tvec))      # straight-line distance
